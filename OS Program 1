@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define NUM_PROCESSES 4
+#define NUM_RESOURCES 3
+
+void print_matrix(int matrix[NUM_PROCESSES][NUM_RESOURCES], char* name) {
+    printf("%s matrix:\n", name);
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        for (int j = 0; j < NUM_RESOURCES; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void print_vector(int vector[NUM_RESOURCES], char* name) {
+    printf("%s vector:\n", name);
+    for (int i = 0; i < NUM_RESOURCES; i++) {
+        printf("%d ", vector[i]);
+    }
+    printf("\n");
+}
+
+bool is_safe(int claim[NUM_PROCESSES][NUM_RESOURCES], int allocation[NUM_PROCESSES][NUM_RESOURCES], int available[NUM_RESOURCES]) {
+    bool finish[NUM_PROCESSES] = { false };
+    int work[NUM_RESOURCES];
+    for (int i = 0; i < NUM_RESOURCES; i++) {
+        work[i] = available[i];
+    }
+
+    int count = 0;
+    while (count < NUM_PROCESSES) {
+        bool found = false;
+        for (int i = 0; i < NUM_PROCESSES; i++) {
+            if (!finish[i]) {
+                bool enough_resources = true;
+                for (int j = 0; j < NUM_RESOURCES; j++) {
+                    if (claim[i][j] - allocation[i][j] > work[j]) {
+                        enough_resources = false;
+                        break;
+                    }
+                }
+                if (enough_resources) {
+                    for (int j = 0; j < NUM_RESOURCES; j++) {
+                        work[j] += allocation[i][j];
+                    }
+                    finish[i] = true;
+                    found = true;
+                    count++;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    int claim[NUM_PROCESSES][NUM_RESOURCES] = {
+        { 3, 2, 2 },
+        { 6, 1, 3 },
+        { 3, 1, 4 },
+        { 4, 2, 2 }
+    };
+    int allocation[NUM_PROCESSES][NUM_RESOURCES] = {
+        { 1, 0, 0 },
+        { 6, 1, 2 },
+        { 2, 1, 1 },
+        { 0, 0, 2 }
+    };
+    int available[NUM_RESOURCES] = { 9, 3, 6 };
+
+    print_matrix(claim, "Claim");
+    print_matrix(allocation, "Allocation");
+    print_vector(available, "Available");
+
+    if (is_safe(claim, allocation, available)) {
+        printf("The system is in a safe state.\n");
+    } else {
+        printf("The system is in an unsafe state.\n");
+    }
+
+    return 0;
+}
