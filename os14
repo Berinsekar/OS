@@ -1,0 +1,63 @@
+#include<stdio.h>
+
+int main() {
+    int n = 19; 
+    int frames = 3; 
+    int pageRef[19] = {7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1}; 
+    int pageFaults = 0;
+    int frameArray[frames]; 
+    int maxDistance, replaceIndex;
+    int distance[frames]; 
+    
+    
+    for(int i = 0; i < frames; i++) {
+        frameArray[i] = -1;
+    }
+    
+    
+    for(int i = 0; i < n; i++) {
+        int page = pageRef[i];
+        int pageFound = 0;
+        
+        for(int j = 0; j < frames; j++) {
+            if(frameArray[j] == page) {
+                pageFound = 1;
+                break;
+            }
+        }
+        
+        if(!pageFound) {
+            pageFaults++;
+
+            for(int j = 0; j < frames; j++) {
+                int pageFound = 0;
+                int k;
+                for(k = i+1; k < n; k++) {
+                    if(pageRef[k] == frameArray[j]) {
+                        pageFound = 1;
+                        break;
+                    }
+                }
+                if(pageFound) {
+                    distance[j] = k - i;
+                } else {
+                    distance[j] = n+1;
+                }
+            }
+
+            maxDistance = -1;
+            for(int j = 0; j < frames; j++) {
+                if(distance[j] > maxDistance) {
+                    maxDistance = distance[j];
+                    replaceIndex = j;
+                }
+            }
+
+            frameArray[replaceIndex] = page;
+        }
+    }
+    
+    printf("Number of Page Faults: %d\n", pageFaults);
+    
+    return 0;
+}
