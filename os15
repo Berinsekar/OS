@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_QUEUE_SIZE 100
+
+int main() {
+    int queue[MAX_QUEUE_SIZE], head, i, n, diff, seek = 0;
+
+    printf("Enter the number of tracks: ");
+    scanf("%d", &n);
+
+    printf("Enter the queue of disk track positions:\n");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &queue[i]);
+    }
+
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    queue[n] = head;
+    n++;
+
+    for (i = 0; i < n; i++) {
+        diff = abs(queue[i] - queue[i+1]);
+        seek += diff;
+        printf("Move from %d to %d with seek %d\n", queue[i], queue[i+1], diff);
+    }
+
+    printf("\nTotal seek time: %d\n", seek);
+    printf("Average seek time: %.2f\n", (float) seek / (n-1));
+
+    return 0;
+}
