@@ -1,0 +1,95 @@
+#include <stdio.h>
+
+#define MAX_PROCESS 10
+
+int main() {
+
+    int n, quantum, burst_time[MAX_PROCESS], remaining_burst_time[MAX_PROCESS];
+
+    int waiting_time = 0, turnaround_time = 0, completion_time[MAX_PROCESS], arrival_time[MAX_PROCESS];
+
+    float average_waiting_time, average_turnaround_time;
+
+    
+
+    printf("Enter the number of processes: ");
+
+    scanf("%d", &n);
+
+    printf("Enter the burst time for each process:\n");
+
+    for (int i = 0; i < n; i++) {
+
+        printf("P%d: ", i+1);
+
+        scanf("%d", &burst_time[i]);
+
+        remaining_burst_time[i] = burst_time[i];
+
+    }
+
+    printf("Enter the time quantum: ");
+
+    scanf("%d", &quantum);
+
+    printf("Enter the arrival time for each process:\n");
+
+    for (int i = 0; i < n; i++) {
+
+        printf("P%d: ", i+1);
+
+        scanf("%d", &arrival_time[i]);
+
+    }
+
+    int time = 0, completed_processes = 0;
+
+    while (completed_processes < n) {
+
+        for (int i = 0; i < n; i++) {
+
+            if (remaining_burst_time[i] > 0) {
+
+                if (remaining_burst_time[i] <= quantum) {
+
+                    time += remaining_burst_time[i];
+
+                    remaining_burst_time[i] = 0;
+
+                    completion_time[i] = time;
+
+                    completed_processes++;
+
+                } else {
+
+                    time += quantum;
+
+                    remaining_burst_time[i] -= quantum;
+
+                }
+
+                if (remaining_burst_time[i] == 0) {
+
+                    turnaround_time += completion_time[i] - arrival_time[i];
+
+                    waiting_time += completion_time[i] - arrival_time[i] - burst_time[i];
+
+                }
+
+            }
+
+        }
+
+    }
+
+    average_waiting_time = (float) waiting_time / n;
+
+    average_turnaround_time = (float) turnaround_time / n;
+
+    printf("\nAverage waiting time: %.2f ms\n", average_waiting_time);
+
+    printf("Average turnaround time: %.2f ms\n", average_turnaround_time);
+
+    return 0;
+
+}
