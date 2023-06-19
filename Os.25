@@ -1,0 +1,71 @@
+#include <stdio.h>
+
+#define BLOCK_SIZE 1 
+
+#define FILE_SIZE 100
+
+int contiguous() {
+
+    int i;
+
+    int numOperations = 0;
+
+   
+
+    for (i = 0; i < FILE_SIZE; i++) {
+
+        numOperations++;
+
+    }
+
+    return numOperations;
+
+}
+
+int linked() {
+
+    int i;
+
+    int numOperations = 0;
+
+    
+
+    for (i = 0; i < FILE_SIZE; i++) {
+
+        numOperations++; 
+
+        numOperations++; 
+
+    }
+
+    return numOperations;
+
+}
+
+int indexed() {
+
+    int numOperations = 0;
+
+  
+
+    numOperations++;
+
+   
+
+    numOperations += FILE_SIZE;
+
+    return numOperations;
+
+}
+
+int main() {
+
+    printf("Contiguous allocation: %d disk I/O operations\n", contiguous());
+
+    printf("Linked allocation: %d disk I/O operations\n", linked());
+
+    printf("Indexed allocation: %d disk I/O operations\n", indexed());
+
+    return 0;
+
+}
