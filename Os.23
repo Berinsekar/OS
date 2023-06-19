@@ -1,0 +1,137 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+int compare(const void *a, const void *b) {
+
+    return ((int)a - (int)b);
+
+}
+
+void calculateSCAN(int tracks[], int size, int initial, int direction) {
+
+    int headMovement = 0;
+
+    int currentIndex = -1;
+
+    int i;
+
+    
+
+    
+
+    qsort(tracks, size, sizeof(int), compare);
+
+    
+
+    for (i = 0; i < size; i++) {
+
+        if (tracks[i] >= initial) {
+
+            currentIndex = i;
+
+            break;
+
+        }
+
+    }
+
+    
+
+    printf("Order of track movements: %d ", initial);
+
+    
+
+   
+
+    if (direction == 1) {
+
+        // Moving towards higher tracks
+
+        for (i = currentIndex; i < size; i++) {
+
+            printf("%d ", tracks[i]);
+
+            headMovement += abs(tracks[i] - initial);
+
+            initial = tracks[i];
+
+        }
+
+        
+
+    
+
+        for (i = currentIndex - 1; i >= 0; i--) {
+
+            printf("%d ", tracks[i]);
+
+            headMovement += abs(tracks[i] - initial);
+
+            initial = tracks[i];
+
+        }
+
+    }
+
+    
+
+  
+
+    else if (direction == -1) {
+
+       
+
+        for (i = currentIndex - 1; i >= 0; i--) {
+
+            printf("%d ", tracks[i]);
+
+            headMovement += abs(tracks[i] - initial);
+
+            initial = tracks[i];
+
+        }
+
+        
+
+       
+
+        for (i = currentIndex; i < size; i++) {
+
+            printf("%d ", tracks[i]);
+
+            headMovement += abs(tracks[i] - initial);
+
+            initial = tracks[i];
+
+        }
+
+    }
+
+    
+
+    printf("\nAverage head movement: %.2f\n", (float)headMovement / size);
+
+}
+
+int main() {
+
+    int tracks[] = {55, 58, 60, 70, 18};
+
+    int size = sizeof(tracks) / sizeof(tracks[0]);
+
+    int initial = 55;
+
+    int direction = 1;
+
+    
+
+    calculateSCAN(tracks, size, initial, direction);
+
+    
+
+    return 0;
+
+}
+
+            
