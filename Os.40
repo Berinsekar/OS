@@ -1,0 +1,111 @@
+#include<stdio.h>
+
+#include<stdlib.h>
+
+#define MAX 100
+
+void sort(int tracks[], int n) {
+
+    int i, j, temp;
+
+    for (i = 0; i < n-1; i++) {
+
+        for (j = i+1; j < n; j++) {
+
+            if (tracks[i] > tracks[j]) {
+
+                temp = tracks[i];
+
+                tracks[i] = tracks[j];
+
+                tracks[j] = temp;
+
+            }
+
+        }
+
+    }
+
+}
+
+int findIndex(int tracks[], int n, int head) {
+
+    int i;
+
+    for (i = 0; i < n; i++) {
+
+        if (tracks[i] > head)
+
+            return i;
+
+    }
+
+    return n;
+
+}
+
+void CLOOK(int tracks[], int n, int head) {
+
+    sort(tracks, n);
+
+    int i, index, distance = 0;
+
+    index = findIndex(tracks, n, head);
+
+    printf("Order of tracks visited:\n");
+
+    for (i = index; i < n; i++) {
+
+        printf("%d ", tracks[i]);
+
+        distance += abs(tracks[i] - head);
+
+        head = tracks[i];
+
+    }
+
+    if (index != 0) {
+
+        for (i = 0; i < index; i++) {
+
+            printf("%d ", tracks[i]);
+
+            distance += abs(tracks[i] - head);
+
+            head = tracks[i];
+
+        }
+
+    }
+
+    printf("\n\nAverage head movement = %.2f\n", (float) distance / n);
+
+}
+
+int main() {
+
+    int tracks[MAX];
+
+    int n, i, head;
+
+    printf("Enter the number of tracks: ");
+
+    scanf("%d", &n);
+
+    printf("Enter the track positions: ");
+
+    for (i = 0; i < n; i++) {
+
+        scanf("%d", &tracks[i]);
+
+    }
+
+    printf("Enter the initial head position: ");
+
+    scanf("%d", &head);
+
+    CLOOK(tracks, n, head);
+
+    return 0;
+
+}
