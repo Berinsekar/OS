@@ -1,0 +1,93 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include <limits.h>
+
+#include <stdbool.h>
+
+int abs_diff(int a, int b) {
+
+    return abs(a - b);
+
+}
+
+int findClosestTrack(int tracks[], int numTracks, int currentTrack, bool visited[]) {
+
+    int minDistance = INT_MAX;
+
+    int closestTrack = -1;
+
+    for (int i = 0; i < numTracks; i++) {
+
+        if (!visited[i] && abs_diff(tracks[i], currentTrack) < minDistance) {
+
+            minDistance = abs_diff(tracks[i], currentTrack);
+
+            closestTrack = i;
+
+        }
+
+    }
+
+    return closestTrack;
+
+}
+
+float calculateAverageHeadMovement(int tracks[], int numTracks, int initialTrack) {
+
+    bool visited[numTracks];
+
+    for (int i = 0; i < numTracks; i++) {
+
+        visited[i] = false;
+
+    }
+
+    int currentTrack = initialTrack;
+
+    int totalHeadMovement = 0;
+
+    for (int i = 0; i < numTracks; i++) {
+
+        int closestTrack = findClosestTrack(tracks, numTracks, currentTrack, visited);
+
+        visited[closestTrack] = true;
+
+        totalHeadMovement += abs_diff(tracks[closestTrack], currentTrack);
+
+        currentTrack = tracks[closestTrack];
+
+    }
+
+    return (float)totalHeadMovement / numTracks;
+
+}
+
+int main() {
+
+    int numTracks = 5;
+
+    int tracks[] = {55, 58, 60, 70, 18};
+
+    int initialTrack;
+
+    printf("Enter the initial track position: ");
+
+    scanf("%d", &initialTrack);
+
+    float averageHeadMovement = calculateAverageHeadMovement(tracks, numTracks, initialTrack);
+
+    printf("\nTrack Positions:\n");
+
+    for (int i = 0; i < numTracks; i++) {
+
+        printf("Track %d: %d\n", i + 1, tracks[i]);
+
+    }
+
+    printf("\nAverage Head Movement: %.2f\n", averageHeadMovement);
+
+    return 0;
+
+}
